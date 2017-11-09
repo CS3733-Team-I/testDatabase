@@ -1,9 +1,13 @@
 package com.CS3733I.dao;
 
 import com.CS3733I.model.Edges;
+import com.sun.javafx.geom.Edge;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EdgesDao {
     public void insertEdges(Connection con, Edges edges)throws Exception{
@@ -24,16 +28,25 @@ public class EdgesDao {
         pstmt.executeUpdate();
     }
 
-    public Edges selectEdges(Connection con, String edgeID)throws Exception{
-        Edges edges = new Edges(edgeID);
-        String sql = "select * from T_EDGES where edgesID = ?";
+    public ArrayList<Edges> selectEdges(Connection con, ArrayList<Edges> edgesList)throws Exception{
+        Edges edges;
+        String sql = "select * from T_EDGES";
         PreparedStatement pstmt = con.prepareStatement(sql);
-        pstmt.setString(1, edgeID);
         ResultSet rs = pstmt.executeQuery();
-        if(rs.next()){
+        while(rs.next()){
+            edges = new Edges();
+            edges.setEdgeID(rs.getString("edgeID"));
             edges.setStartNode(rs.getString("startNode"));
             edges.setEndNode(rs.getString("endNode"));
+            edgesList.add(edges);
         }
-        return edges;
+        return edgesList;
+    }
+
+    public void deleteEdges(Connection con, Edges edges)throws Exception{
+        String sql = "delete from t_edges where edgeID = ?";
+        PreparedStatement pstmt = con.prepareStatement(sql);
+        pstmt.setString(1, edges.getEdgeID());
+        pstmt.execute();
     }
 }

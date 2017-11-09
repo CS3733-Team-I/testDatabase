@@ -14,7 +14,6 @@ public class Nodes {
         super();
         // TODO Auto-generated constructor stub
     }
-
     public Nodes(String nodeID, int xcoord, int ycoord, String floor, String building, String nodeType, String longName, String shortName, String teamAssigned) {
         this.nodeID = nodeID;
         this.xcoord = xcoord;

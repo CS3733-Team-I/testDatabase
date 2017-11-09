@@ -53,7 +53,7 @@ public class CSVFileUtil {
         bWriter.newLine();
         try{
             con = dbUtil.getCon();
-            String sql = "select * from CSVIMPORT";
+            String sql = "select * from T_NODES";
             PreparedStatement pstmt = con.prepareStatement(sql);
             ResultSet rs = pstmt.executeQuery();
             while(rs.next()){
@@ -117,7 +117,7 @@ public class CSVFileUtil {
 
         DbUtil dbUtil = new DbUtil();
         Connection con = null;
-        bWriter.write("nodeID,xcoord,ycoord,floor,building,nodeType,longName,shortName,teamAssigned");
+        bWriter.write("edgeID, startNode, endNode");
         bWriter.newLine();
         try {
             con = dbUtil.getCon();

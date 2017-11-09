@@ -7,6 +7,7 @@ import com.CS3733I.util.DbUtil;
 import org.apache.derby.impl.store.raw.log.Scan;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class main {
@@ -17,21 +18,31 @@ public class main {
         DbUtil dbUtil = new DbUtil();
         EdgesDao edgesDao = new EdgesDao();
         NodesDao nodesDao = new NodesDao();
+        ArrayList<Nodes> nodesList = new ArrayList<Nodes>();
+        ArrayList<Edges> edgesList = new ArrayList<Edges>();
 
         String inPath;
         Connection con = null;
         try {
             con = dbUtil.getCon();
             System.out.println("Successfully connected to database!\n");
+
+            dbUtil.createTables(con);
+            System.out.println("Tables are created.");
+
             System.out.println("Please select: 1--Nodes Operation  2--Edges Operation");
             Scanner choiceNumScanner = new Scanner(System.in);
             int choiceNum = choiceNumScanner.nextInt();
+
             switch (choiceNum) {
                 case 1:
                     System.out.println("Enter a path to read the CSV file: ");
                     Scanner inputScanner = new Scanner(System.in);
                     inPath = inputScanner.next();
                     csvFileUtil.readNodesCSV(inPath);
+                    nodesDao.selectNodes(con, nodesList);
+                    //System.out.println(nodesList.get(0).getNodeID());
+
 
                     System.out.println("Import is finished. Try to update the database a little bit.");
                     System.out.println("Please enter an node ID:");
@@ -89,6 +100,8 @@ public class main {
                     Scanner pathScanner2 = new Scanner(System.in);
                     inPath = pathScanner2.next();
                     csvFileUtil.readEdgesCSV(inPath);
+                    edgesDao.selectEdges(con, edgesList);
+                    //System.out.println(edgesList.get(0).getEdgeID());
 
                     System.out.println("Import is finished. Try to update the database a little bit.");
                     System.out.println("Please enter an edge ID:");
