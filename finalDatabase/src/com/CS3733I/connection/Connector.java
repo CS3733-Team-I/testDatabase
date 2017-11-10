@@ -3,6 +3,7 @@ package com.CS3733I.connection;
 import com.CS3733I.objects.Edge;
 import com.CS3733I.objects.EdgeCollection;
 import com.CS3733I.objects.Node;
+import com.CS3733I.objects.NodeCollection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -31,16 +32,27 @@ public class Connector {
     }
 
     public static Edge selectEdge(Connection conn, String edgeID) throws SQLException {
-        String sql = "select * from T_EDGES where edgesID = ?";
+        Edge edge = null;
+        String sql = "SELECT ? FROM T_EDGES"; //change T_EDGES
         PreparedStatement pstmt = conn.prepareStatement(sql);
         pstmt.setString(1, edgeID);
         ResultSet rs = pstmt.executeQuery();
-        Edge edge = EdgeCollection.getInstance().getEdge(edgeID);
-        if(rs.next()) {
+        if (rs.next()) {
+            edge = EdgeCollection.getInstance().getEdge(rs.getString("edgeID"));
             edge.setNode1(rs.getString("startNode"));
             edge.setNode2(rs.getString("endNode"));
+        } else {
+
         }
         return edge;
+    }
+
+    public void deleteEdge(Connection conn, Edge edge) throws SQLException {
+        String sql = "DELETE FROM T_EDGES where edgeID = ?";
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1, edge.getEdgeID());
+        pstmt.execute();
+        EdgeCollection.getInstance().deleteEdge(edge.getEdgeID());
     }
 
     public static void insertNode(Connection conn, Node node)throws SQLException{
@@ -70,5 +82,35 @@ public class Connector {
         pstmt.setString(7, node.getShortName());
         pstmt.setString(8, node.getTeamAssigned());
         pstmt.executeUpdate();
+    }
+
+    public Node selectNodes(Connection conn, String nodeID) throws SQLException {
+        Node node = null;
+        String sql = "SELECT ? FROM T_NODES";
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1, nodeID);
+        ResultSet rs = pstmt.executeQuery();
+        if(rs.next()) {
+            node = NodeCollection.getInstance().getNode(nodeID);
+            node.setXcoord(rs.getInt("xcoord"));
+            node.setYcoord(rs.getInt("ycoord"));
+            node.setFloor(rs.getString("floor"));
+            node.setBuilding(rs.getString("building"));
+            node.setNodeType(rs.getString("nodeType"));
+            node.setLongName(rs.getString("longName"));
+            node.setShortName(rs.getString("shortName"));
+            node.setTeamAssigned(rs.getString("teamAssigned"));
+        } else {
+
+        }
+        return node;
+    }
+
+    public void deleteNode(Connection conn, Node node) throws SQLException {
+        String sql = "DELETE FROM T_NODES WHERE nodesID = ?";
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1, node.getNodeID());
+        pstmt.execute();
+        NodeCollection.getInstance().deleteNode(node.getNodeID());
     }
 }

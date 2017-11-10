@@ -18,6 +18,10 @@ public class EdgeCollection {
         return edgeHashMap.get(id);
     }
 
+    public void deleteEdge(String id) {
+        edgeHashMap.remove(id);
+    }
+
     public static EdgeCollection getInstance() {
         if(instance == null) {
             instance = new EdgeCollection();

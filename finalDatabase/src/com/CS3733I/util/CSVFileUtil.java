@@ -65,7 +65,7 @@ public class CSVFileUtil {
 
         try {
             conn = DBUtil.getCon(); //might need to be in a seperate try/catch
-            String sql = "SELECT * FROM CSVIMPORT";
+            String sql = "SELECT * FROM T_NODES";
             PreparedStatement pstmt = conn.prepareStatement(sql);
             ResultSet rs = pstmt.executeQuery();
 

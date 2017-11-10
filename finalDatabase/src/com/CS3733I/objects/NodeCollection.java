@@ -19,6 +19,10 @@ public class NodeCollection {
         return nodeHashMap.get(id);
     }
 
+    public void deleteNode(String id) {
+        nodeHashMap.remove(id);
+    }
+
     public static NodeCollection getInstance()  {
         if(instance == null) {
             instance = new NodeCollection();
